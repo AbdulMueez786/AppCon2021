@@ -1,10 +1,12 @@
-package com.example.appcon_2021;
+package com.example.appcon_2021.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.appcon_2021.R;
+
+public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
