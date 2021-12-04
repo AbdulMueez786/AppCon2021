@@ -2,65 +2,97 @@ package com.example.appcon_2021.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.appcon_2021.Adapters.MyGoals_adapter;
+import com.example.appcon_2021.Adapters.TopDonors_adapter;
+import com.example.appcon_2021.Model.goal;
+import com.example.appcon_2021.Model.user;
 import com.example.appcon_2021.R;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyGoals#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyGoals extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MyGoals() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyGoals.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyGoals newInstance(String param1, String param2) {
-        MyGoals fragment = new MyGoals();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private View view;
+    private RecyclerView rv;
+    private List<goal> ls;
+    private com.google.android.material.textfield.TextInputEditText list_search;
+    private MyGoals_adapter list_adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_goals, container, false);
+        view=inflater.inflate(R.layout.fragment_my_goals, container, false);
+        rv=view.findViewById(R.id.rv);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        ls = new ArrayList<>();
+        this.list_search = view.findViewById(R.id.list_search);
+        list_adapter = new MyGoals_adapter(ls, getContext());
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(lm);
+        rv.setAdapter(list_adapter);
+
+        this.list_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                list_adapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        read_goals();
+
+        return view;
     }
+    void read_goals(){
+        FirebaseDatabase.getInstance().getReference("goals")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                        ls.clear();
+                        for (DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
+                            goal r = snapshot1.getValue(goal.class);
+
+                            ls.add(r);
+                            list_adapter.notifyDataSetChanged();
+                            list_adapter.addlist();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+
 }

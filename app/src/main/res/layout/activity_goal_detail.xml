@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.GoalDetail">
+<ImageView
+    android:id="@+id/image"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:src="@drawable/profile"
+    />
+   <EditText
+      android:id="@+id/title"
+      android:layout_width="200dp"
+      android:layout_height="100dp"
+      android:text="Enter Title"
+    />
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Enter desc"
+        />
+    <EditText
+        android:id="@+id/category"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Enter Category"
+        />
+    <EditText
+        android:id="@+id/target_amount"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Enter target amount"
+        />
+    <EditText
+        android:id="@+id/raised_amount"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Enter raised amount"
+        />
+
+</LinearLayout>
